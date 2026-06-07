@@ -45,35 +45,6 @@ def analyze_overfitting(train_losses, val_losses, final_train_loss, final_val_lo
     best_val_epoch = int(np.argmin(val_losses)) + 1
     best_val_loss = min(val_losses)
 
-    print("\n" + "=" * 60)
-    print("过拟合分析")
-    print("=" * 60)
-    print(f"最终训练集 MSE Loss: {final_train_loss:.6f}")
-    print(f"最终验证集 MSE Loss: {final_val_loss:.6f}")
-    print(f"验证集/训练集 Loss 比值: {ratio:.4f}")
-    print(f"Loss 差值 (Val - Train): {gap:.6f}")
-    print(f"验证集最低 Loss: {best_val_loss:.6f} (Epoch {best_val_epoch})")
-
-    if ratio > 1.5:
-        print("\n⚠ 判断结果: 存在明显过拟合")
-        print("  验证集 Loss 显著高于训练集 Loss，模型在训练数据上过度拟合。")
-    elif ratio > 1.2:
-        print("\n⚠ 判断结果: 存在轻微过拟合")
-        print("  验证集 Loss 略高于训练集 Loss，模型有一定程度的过拟合。")
-    else:
-        print("\n✓ 判断结果: 未发现明显过拟合")
-        print("  训练集和验证集 Loss 接近，模型泛化能力良好。")
-
-    # 检查后期趋势
-    last_50_train = train_losses[-50:]
-    last_50_val = val_losses[-50:]
-    val_increasing = last_50_val[-1] > min(last_50_val)
-    train_decreasing = last_50_train[-1] < last_50_train[0]
-
-    if val_increasing and train_decreasing:
-        print("  注意: 训练后期验证集 Loss 有上升趋势，而训练集 Loss 仍在下降，")
-        print("  这是过拟合的典型特征。建议使用早停 (Early Stopping) 策略。")
-
     # 绘制分析图
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(range(1, num_epochs + 1), train_losses, label="训练集 Loss", color="blue", linewidth=1.5)
