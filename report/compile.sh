@@ -1,0 +1,1 @@
+cd "$(dirname "$0")" && typst compile main.typ --root ./..
